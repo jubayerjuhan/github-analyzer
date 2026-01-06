@@ -32,9 +32,7 @@ export default function Home() {
   const [loadingMessage, setLoadingMessage] = useState('');
 
   const exampleProfiles = [
-    'vitalik',
-    'bkrem',
-    'austintgriffith',
+    'jubayerjuhan',
   ];
 
   useEffect(() => {
