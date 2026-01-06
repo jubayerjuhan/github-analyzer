@@ -44,13 +44,19 @@ export default function ReportPage() {
       setError('');
 
       try {
-        const response = await fetch('/api/analyze', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ profileUrl: username }),
-        });
+        // Try to fetch latest analysis from database first
+        let response = await fetch(`/api/analysis/latest/${username}`);
+
+        // If no analysis exists, trigger new analysis
+        if (response.status === 404) {
+          response = await fetch('/api/analyze', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ profileUrl: username }),
+          });
+        }
 
         const data = await response.json();
 
@@ -107,8 +113,15 @@ export default function ReportPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      {/* Animated background blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob"></div>
+        <div className="absolute top-0 -right-4 w-96 h-96 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-20 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-4000"></div>
+      </div>
+
+      <div className="container mx-auto px-4 py-8 max-w-7xl relative z-10">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <Button onClick={() => router.push('/')} variant="ghost">
@@ -122,7 +135,7 @@ export default function ReportPage() {
         </div>
 
         {/* Profile Header */}
-        <Card className="mb-8 shadow-lg">
+        <Card className="mb-8 shadow-2xl border-0 bg-white/90 backdrop-blur-sm">
           <CardHeader>
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-4">
@@ -227,16 +240,16 @@ function ScoreCard({
   const bgClass = getScoreBgColor(displayScore);
 
   return (
-    <Card>
+    <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/90 backdrop-blur-sm">
       <CardHeader className="pb-2">
-        <CardDescription className="flex items-center gap-2">
+        <CardDescription className="flex items-center gap-2 font-medium">
           <Icon className="h-4 w-4" />
           {title}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className={`text-4xl font-bold ${colorClass}`}>{score}</div>
-        <Progress value={score} className="mt-2" />
+        <Progress value={score} className="mt-2 h-2" />
       </CardContent>
     </Card>
   );
@@ -246,9 +259,9 @@ function SmallScoreCard({ title, score }: { title: string; score: number }) {
   const colorClass = getScoreColor(score);
 
   return (
-    <Card>
+    <Card className="border-0 shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur-sm">
       <CardContent className="pt-6">
-        <div className="text-sm text-muted-foreground mb-1">{title}</div>
+        <div className="text-sm text-muted-foreground mb-1 font-medium">{title}</div>
         <div className={`text-2xl font-bold ${colorClass}`}>{score}</div>
         <Progress value={score} className="mt-2 h-2" />
       </CardContent>

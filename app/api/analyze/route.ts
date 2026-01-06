@@ -4,6 +4,7 @@ import { fetchGitHubSummary, detectWeb3 } from '@/lib/github';
 import { generateHiringReport, buildAnalysisPayload } from '@/lib/openai';
 import { reportCache, rateLimiter, getClientIdentifier } from '@/lib/cache';
 import { validateEnv } from '@/lib/env';
+import { prisma } from '@/lib/db';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60; // 60 seconds timeout
@@ -142,11 +143,34 @@ export async function POST(request: NextRequest) {
     // Cache the report
     reportCache.set(cacheKey, report);
 
+    // Save to database
+    let analysisId: string | undefined;
+    try {
+      const analysis = await prisma.analysis.create({
+        data: {
+          username: username.toLowerCase(),
+          profileUrl,
+          report: report as any,
+          rawData: {
+            profile: githubSummary.profile,
+            repos: githubSummary.repos,
+            activitySignals: githubSummary.activitySignals,
+            web3Stats: githubSummary.web3Stats,
+          },
+        },
+      });
+      analysisId = analysis.id;
+    } catch (dbError) {
+      console.error('Database save error:', dbError);
+      // Continue even if database save fails
+    }
+
     return NextResponse.json(
       {
         report,
         cached: false,
         username,
+        analysisId,
         raw: {
           profileSummary: {
             username: githubSummary.profile.login,

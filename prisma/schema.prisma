@@ -1,0 +1,23 @@
+// Prisma schema for GitHub Analyzer database
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Analysis {
+  id         String   @id @default(cuid())
+  username   String   @db.VarChar(255)
+  profileUrl String   @db.VarChar(500)
+  report     Json
+  rawData    Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([username])
+  @@index([createdAt])
+}

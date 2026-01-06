@@ -16,19 +16,22 @@ function getOpenAIClient(): OpenAI {
 
 const HIRING_REPORT_SCHEMA = {
   type: 'object',
+  additionalProperties: false,
   properties: {
     profile: {
       type: 'object',
+      additionalProperties: false,
       properties: {
         username: { type: 'string' },
         displayName: { type: 'string' },
         headline: { type: 'string' },
         quickSummary: { type: 'string' },
       },
-      required: ['username', 'headline', 'quickSummary'],
+      required: ['username', 'displayName', 'headline', 'quickSummary'],
     },
     scores: {
       type: 'object',
+      additionalProperties: false,
       properties: {
         overall: { type: 'number', minimum: 0, maximum: 100 },
         engineering: { type: 'number', minimum: 0, maximum: 100 },
@@ -50,6 +53,7 @@ const HIRING_REPORT_SCHEMA = {
     },
     web3Assessment: {
       type: 'object',
+      additionalProperties: false,
       properties: {
         web3RepoCount: { type: 'number' },
         keyStacks: { type: 'array', items: { type: 'string' } },
@@ -57,6 +61,7 @@ const HIRING_REPORT_SCHEMA = {
           type: 'array',
           items: {
             type: 'object',
+            additionalProperties: false,
             properties: {
               name: { type: 'string' },
               reason: { type: 'string' },
@@ -71,12 +76,14 @@ const HIRING_REPORT_SCHEMA = {
     },
     engineeringAssessment: {
       type: 'object',
+      additionalProperties: false,
       properties: {
         strengths: { type: 'array', items: { type: 'string' } },
         weaknesses: { type: 'array', items: { type: 'string' } },
         codeQualitySignals: { type: 'array', items: { type: 'string' } },
         testingAndCI: {
           type: 'object',
+          additionalProperties: false,
           properties: {
             testsPresent: {
               type: 'string',
@@ -97,6 +104,7 @@ const HIRING_REPORT_SCHEMA = {
       type: 'array',
       items: {
         type: 'object',
+        additionalProperties: false,
         properties: {
           name: { type: 'string' },
           importance: { type: 'string', enum: ['high', 'medium', 'low'] },
@@ -109,6 +117,7 @@ const HIRING_REPORT_SCHEMA = {
     },
     hiringRecommendation: {
       type: 'object',
+      additionalProperties: false,
       properties: {
         verdict: {
           type: 'string',
@@ -119,6 +128,7 @@ const HIRING_REPORT_SCHEMA = {
           type: 'array',
           items: {
             type: 'object',
+            additionalProperties: false,
             properties: {
               role: {
                 type: 'string',
@@ -142,12 +152,14 @@ const HIRING_REPORT_SCHEMA = {
     },
     interviewPlan: {
       type: 'object',
+      additionalProperties: false,
       properties: {
         focusAreas: { type: 'array', items: { type: 'string' } },
         questions: {
           type: 'array',
           items: {
             type: 'object',
+            additionalProperties: false,
             properties: {
               category: { type: 'string' },
               question: { type: 'string' },
@@ -171,6 +183,7 @@ const HIRING_REPORT_SCHEMA = {
     },
     dueDiligence: {
       type: 'object',
+      additionalProperties: false,
       properties: {
         thingsToVerify: { type: 'array', items: { type: 'string' } },
         missingInfo: { type: 'array', items: { type: 'string' } },
@@ -219,6 +232,15 @@ WEB3 DETECTION:
 - Count repos with blockchain/web3 technologies
 - Identify key stacks: Hardhat, Foundry, Solidity, ethers, wagmi, Solana, etc.
 - Note repos with smart contracts or DeFi/NFT focus
+
+ROLE FIT SCORING:
+- If there is NO evidence of a technology/skill for a role, the fitScore MUST be 0%
+- Do not give "pity points" - be strict and evidence-based
+- Examples:
+  * No Solidity code = 0% for Solidity role
+  * No Web3 technologies = 0% for Web3 roles
+  * No CI/CD evidence = 0% for DevOps role
+- Only give non-zero scores when there is actual evidence in the repos
 
 HIRING VERDICT:
 - STRONG_YES: Exceptional candidate, hire immediately
