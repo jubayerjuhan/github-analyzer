@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
             repos: githubSummary.repos,
             activitySignals: githubSummary.activitySignals,
             web3Stats: githubSummary.web3Stats,
-          },
+          } as any,
         },
       });
       analysisId = analysis.id;

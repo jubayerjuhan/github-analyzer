@@ -264,7 +264,7 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Generates customized interview questions and take-home task ideas based on the candidate's work.
+                Generates customized interview questions and take-home task ideas based on the candidate&apos;s work.
               </p>
             </CardContent>
           </Card>

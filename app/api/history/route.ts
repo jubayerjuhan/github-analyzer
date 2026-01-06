@@ -18,7 +18,7 @@ export async function GET() {
     });
 
     const simplifiedAnalyses = analyses.map((analysis) => {
-      const report = analysis.report as HiringReport;
+      const report = analysis.report as unknown as HiringReport;
       return {
         id: analysis.id,
         username: analysis.username,
