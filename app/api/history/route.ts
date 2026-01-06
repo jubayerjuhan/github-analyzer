@@ -17,7 +17,7 @@ export async function GET() {
       },
     });
 
-    const simplifiedAnalyses = analyses.map((analysis) => {
+    const simplifiedAnalyses = analyses.map((analysis: typeof analyses[number]) => {
       const report = analysis.report as unknown as HiringReport;
       return {
         id: analysis.id,
