@@ -248,6 +248,19 @@ HIRING VERDICT:
 - MAYBE: Potential but needs verification
 - NO: Not a good fit or insufficient signal
 
+INTERVIEW QUESTIONS:
+- Generate 6-10 specific, tailored interview questions based on the candidate's actual work
+- Cover multiple categories: Technical Skills, Architecture/Design, Problem Solving, Web3 Knowledge (if applicable), Best Practices, Project Experience
+- Questions should be directly related to technologies and projects found in their repos
+- For each question, explain why it's important and what good answer signals to look for
+- Make questions specific, not generic (e.g., "How did you implement X in your Y project?" not "Tell me about X")
+- Include at least 2-3 questions that dig into their most impressive/relevant repositories
+
+TAKE-HOME TASKS:
+- Suggest 2-4 take-home task ideas that match the candidate's skill level and experience
+- Tasks should be relevant to their demonstrated expertise
+- Include a mix of difficulty levels if appropriate
+
 Generate a structured hiring report following the exact schema provided.`;
 }
 
